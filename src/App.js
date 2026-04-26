@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
-function Square({value, onSquareClick}) { 
+function Square({value, onSquareClick, winning}) { 
     return (
         <button 
-            className="square"
+            className={winning ? "square winning" : "square"}
             onClick={onSquareClick}
         >
             {value}
@@ -31,7 +31,8 @@ function Board({xIsNext, squares, onPlay}) {
   const winner = calculateWinner(squares);
   let status;
   if (winner) {
-    status = "Winner: " + winner;
+    status = "Winner: " + winner[0];
+
   } else if(calculateTie(squares)) {
     status = "Tie!";
   } else {
@@ -44,7 +45,11 @@ function Board({xIsNext, squares, onPlay}) {
     for(let col=0; col<3; col++) {
         const index = row*3 + col;
         squares_row.push(
-            <Square key={index} value={squares[index]}  onSquareClick={() =>handleClick(index)} />
+            <Square
+                key={index} 
+                value={squares[index]}  
+                onSquareClick={() =>handleClick(index)} 
+                winning = {winner && winner[1].includes(index)}/>
         )
     }
     rows.push(
@@ -100,7 +105,6 @@ export default function Game() {
                 }
             </li>
         )
-
     }); 
 
     return (
@@ -134,7 +138,7 @@ function calculateWinner(squares) {
     for(let i = 0; i < lines.length; i++) {
         const [a, b, c] = lines[i];
         if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-            return squares[a];
+            return [squares[a], lines[i]];
         }
     }
 
