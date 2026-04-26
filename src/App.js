@@ -94,7 +94,7 @@ export default function Game() {
     const moves = history.map((squares, move) => {
         let description;
         if (move > 0) {
-            description = 'Go to move #' +  move;
+            description = `Go to move #${move} (row: ${locationHistory[move].row}, col: ${locationHistory[move].column})`
         } else {
             description = 'Go to game start';
         }
